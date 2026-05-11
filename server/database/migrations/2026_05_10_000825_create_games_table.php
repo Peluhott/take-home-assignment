@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('title');
             $table->integer('rating')->nullable();
-            $table->string('imageurl')->nullable();
+            $table->string('image_url')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
         });
     }
