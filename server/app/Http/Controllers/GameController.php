@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class GameController
 {
-    protected $gameService;
+    protected GameService $gameService;
 
     public function __construct(GameService $gameService)
     {
