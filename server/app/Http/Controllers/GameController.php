@@ -57,10 +57,7 @@ class GameController
         return $this->gameService->searchGames($data['searchTerm'], Auth::id());
     }
 
-    public function deleteGame(int $game_id)
-    {
-        return $this->gameService->deleteGame($game_id, Auth::id());
-    }
+
 
     public function searchGamesByPlatform(Request $request)
     {
@@ -78,5 +75,9 @@ class GameController
         ]);
 
         return $this->gameService->searchGamesByTag($data['game_tag'], Auth::id());
+    }
+    public function deleteGame(int $game_id)
+    {
+        return $this->gameService->deleteGame($game_id, Auth::id());
     }
 }
