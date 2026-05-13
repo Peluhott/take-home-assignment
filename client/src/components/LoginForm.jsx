@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 
-export default function LoginForm() {
+export default function LoginForm({onSwitchToRegister}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -44,6 +44,12 @@ export default function LoginForm() {
             />
             <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Login
+            </button>
+            <button
+                type="button"
+                onClick={onSwitchToRegister}>
+                Register
+
             </button>
         </form>
         </div>
