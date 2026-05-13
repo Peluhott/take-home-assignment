@@ -23,22 +23,19 @@ class GameRepository
     // function to search games by title, tags, and platform
     public function searchGames(string $searchTerm, int $user_id)
     {
-        return DB::select('SELECT DISTINCT g.* FROM games g LEFT JOIN game_tags gt on g.id = gt.game_id LEFT JOIN tags t on gt.tag_id = t.id LEFT JOIN platform_games pg on g.id = pg.game_id LEFT JOIN platforms p on pg.platform_id = p.id WHERE (g.title LIKE ? OR t.name LIKE ? OR p.name LIKE ?) AND g.user_id = ?', ['%' . $searchTerm . '%', '%' . $searchTerm . '%', '%' . $searchTerm . '%', $user_id]);
+        return DB::select('SELECT DISTINCT g.* FROM games g LEFT JOIN game_tags gt on g.id = gt.game_id LEFT JOIN tags t on gt.tag_id = t.id LEFT JOIN platform_games pg on g.id = pg.game_id LEFT JOIN platforms p on pg.platform_id = p.id WHERE (g.title ILIKE ? OR t.name ILIKE ? OR p.name ILIKE ?) AND g.user_id = ?', ['%' . $searchTerm . '%', '%' . $searchTerm . '%', '%' . $searchTerm . '%', $user_id]);
     }
 
 
-    public function getGamesByName(string $title, int $user_id)
-    {
-        return DB::select('SELECT * FROM games WHERE title LIKE ? and user_id = ?', ['%' . $title . '%', $user_id]);
-    }
+
 
     public function getGamesByPlatform(string $platform_name, int $user_id)
     {
-        return DB::select('SELECT g.* FROM games g JOIN platform_games pg ON g.id = pg.game_id JOIN platforms p ON pg.platform_id = p.id WHERE p.name LIKE ? AND g.user_id = ?', ['%' . $platform_name . '%', $user_id]);
+        return DB::select('SELECT g.* FROM games g JOIN platform_games pg ON g.id = pg.game_id JOIN platforms p ON pg.platform_id = p.id WHERE p.name ILIKE ? AND g.user_id = ?', ['%' . $platform_name . '%', $user_id]);
     }
     public function getGamesByTag(string $game_tag, int $user_id)
     {
-        return DB::select('SELECT g.* FROM games g JOIN game_tags gt ON g.id = gt.game_id JOIN tags t on gt.tag_id = t.id WHERE t.name LIKE ? AND g.user_id = ?', ['%' . $game_tag . '%', $user_id]);
+        return DB::select('SELECT g.* FROM games g JOIN game_tags gt ON g.id = gt.game_id JOIN tags t on gt.tag_id = t.id WHERE t.name ILIKE ? AND g.user_id = ?', ['%' . $game_tag . '%', $user_id]);
     }
 
     public function updategame(int $game_id, string $title, int $user_id, ?int $rating = null, ?string $image_url = null, ?string $public_id = null)
