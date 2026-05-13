@@ -14,10 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         // delete this when finished with project
-        $middleware->validateCsrfTokens(except: [
-            'login',
-            'register',
-        ]);
+
         // delete above when finished with project
     })
     ->withExceptions(function (Exceptions $exceptions): void {
