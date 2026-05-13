@@ -26,6 +26,11 @@ class UserController extends Controller
         return $this->userService->createUser($data['name'], $data['email'], $data['password']);
     }
 
+    public function getUser()
+    {
+        return $this->userService->getUserById(Auth::id());
+    }
+
     public function updateUser(Request $request, int $user_id)
     {
         $data = $request->validate([
