@@ -8,14 +8,25 @@ class GameRepository
 {
     // implement methods for creating game, updating game, deleting game
     //implement methods for retrieving games by name, by tags, by platform
-    public function createGame(string $title, int $user_id, ?int $rating = null, ?string $image_url = null)
+    public function createGame(string $title, int $user_id, ?int $rating = null, ?string $image_url = null, ?string $public_id = null)
     {
-        return DB::insert('INSERT INTO games (title, rating, image_url, user_id) VALUES (?, ?, ?, ?)', [$title, $rating, $image_url, $user_id]);
+        return DB::insert('INSERT INTO games (title, rating, image_url, public_id, user_id) VALUES (?, ?, ?, ?, ?)', [$title, $rating, $image_url, $public_id, $user_id]);
+    }
+    public function getGame(int $game_id, int $user_id)
+    {
+        return DB::selectOne('SELECT * FROM games where id = ? and user_id = ?', [$game_id, $user_id]);
     }
     public function getGamesByUserId(int $user_id)
     {
         return DB::select('SELECT * FROM games where user_id = ?', [$user_id]);
     }
+    // function to search games by title, tags, and platform
+    public function searchGames(string $searchTerm, int $user_id)
+    {
+        return DB::select('SELECT DISTINCT g.* FROM games g LEFT JOIN game_tags gt on g.id = gt.game_id LEFT JOIN tags t on gt.tag_id = t.id LEFT JOIN platform_games pg on g.id = pg.game_id LEFT JOIN platforms p on pg.platform_id = p.id WHERE (g.title LIKE ? OR t.name LIKE ? OR p.name LIKE ?) AND g.user_id = ?', ['%' . $searchTerm . '%', '%' . $searchTerm . '%', '%' . $searchTerm . '%', $user_id]);
+    }
+
+
     public function getGamesByName(string $title, int $user_id)
     {
         return DB::select('SELECT * FROM games WHERE title LIKE ? and user_id = ?', ['%' . $title . '%', $user_id]);
@@ -30,9 +41,9 @@ class GameRepository
         return DB::select('SELECT g.* FROM games g JOIN game_tags gt ON g.id = gt.game_id JOIN tags t on gt.tag_id = t.id WHERE t.name LIKE ? AND g.user_id = ?', ['%' . $game_tag . '%', $user_id]);
     }
 
-    public function updategame(int $game_id, string $title, int $user_id, ?int $rating = null, ?string $image_url = null)
+    public function updategame(int $game_id, string $title, int $user_id, ?int $rating = null, ?string $image_url = null, ?string $public_id = null)
     {
-        return DB::update('UPDATE games SET title = ?, rating = ?, image_url = ? WHERE id = ? AND user_id = ?', [$title, $rating, $image_url, $game_id, $user_id]);
+        return DB::update('UPDATE games SET title = ?, rating = ?, image_url = ?, public_id = ? WHERE id = ? AND user_id = ?', [$title, $rating, $image_url, $public_id, $game_id, $user_id]);
     }
 
     public function deletegame(int $game_id, int $user_id)

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->integer('rating')->nullable();
             $table->string('image_url')->nullable();
+            $table->string('public_id')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
         });
     }
