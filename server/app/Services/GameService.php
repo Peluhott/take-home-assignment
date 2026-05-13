@@ -40,6 +40,11 @@ class GameService
         return $this->gameRepository->getGame($game_id, $user_id);
     }
 
+    public function getGamesByUserId(int $user_id)
+    {
+        return $this->gameRepository->getGamesByUserId($user_id);
+    }
+
     public function updateGame(int $game_id, string $title, int $user_id, ?int $rating = null, $image = null)
     {
         $game = $this->gameRepository->getGame($game_id, $user_id);
@@ -71,5 +76,20 @@ class GameService
             ]);
         }
         return $this->gameRepository->deleteGame($game_id, $user_id);
+    }
+
+    public function searchGames(string $searchTerm, int $user_id)
+    {
+        return $this->gameRepository->searchGames($searchTerm, $user_id);
+    }
+
+    public function searchGamesByPlatform(string $platform_name, int $user_id)
+    {
+        return $this->gameRepository->getGamesByPlatform($platform_name, $user_id);
+    }
+
+    public function searchGamesByTag(string $game_tag, int $user_id)
+    {
+        return $this->gameRepository->getGamesByTag($game_tag, $user_id);
     }
 }
