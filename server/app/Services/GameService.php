@@ -7,8 +7,8 @@ use Cloudinary\Cloudinary;
 
 class GameService
 {
-    protected $gameRepository;
-    protected $cloudinary;
+    protected GameRepository $gameRepository;
+    protected Cloudinary $cloudinary;
 
     public function __construct(GameRepository $gameRepository)
     {
