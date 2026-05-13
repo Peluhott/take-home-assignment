@@ -1,29 +1,26 @@
 import {useState} from 'react';
+import axios from 'axios';
 
 export default function CreateGameForm() {
     const [title, setTitle] = useState('');
     const [rating, setRating]= useState('');
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState(null);
 
-    async function handleSubmit(e) {
-        e.preventDefault();
+     async function handleSubmit(e) {
+    e.preventDefault();
 
-        try {
-            const response = await fetch('/api/game/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({ title, rating, image }),
-            })
-            // add logic to handle a successful response
-        } catch (error) {
-            console.error('Game creation failed:', error);
-        }
-    }
-    
+    const formData = new FormData();
+
+    formData.append('title', title);
+    formData.append('rating', rating);
+    formData.append('image', image);
+
+    await axios.post('/games', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
     return (
         <div>
             <form onSubmit ={handleSubmit}>
@@ -40,10 +37,9 @@ export default function CreateGameForm() {
                     onChange={(e) => setRating(e.target.value)}
                 />
                 <input
-                    type="text"
-                    placeholder="Image URL"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImage(e.target.files[0])}
                 />
                 <button type="submit">Create Game</button>
             </form>
