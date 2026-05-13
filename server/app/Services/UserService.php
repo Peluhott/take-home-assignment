@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use App\Repository\UserRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
@@ -16,6 +17,10 @@ class UserService
 
     public function createUser(string $name, string $email, string $password)
     {
+        // hash password here
+        //lowercase the email
+        $password = Hash::make($password);
+        $email = strtolower($email);
         return $this->userRepository->createUser($name, $email, $password);
     }
 
@@ -26,6 +31,8 @@ class UserService
 
     public function updateUser(int $user_id, string $name, string $email, string $password)
     {
+        $password = Hash::make($password);
+        $email = strtolower($email);
         return $this->userRepository->updateUser($user_id, $name, $email, $password);
     }
 
