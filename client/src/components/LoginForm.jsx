@@ -1,4 +1,7 @@
 import {useState} from 'react';
+import axios from 'axios';
+
+
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
@@ -6,20 +9,16 @@ export default function LoginForm() {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        // send csrf token request to backend to set cookie
+        await axios.get('/sanctum/csrf-cookie');
+        // send login request to backend
         try {
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({ email, password }),  
-            })
-
-            // check if the response is successful and redirect to the home page
-        }
-        catch (error) {            console.error('Login failed:', error);
+            await axios.post('/user/login', { email, password });
+            // on success, reload the page to update the user state in App.jsx
+            window.location.reload();
+        } catch (error) {
+            console.error('Login failed:', error);
+            alert('Login failed. Please check your credentials and try again.');
         }
     }
 
