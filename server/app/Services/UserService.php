@@ -24,7 +24,7 @@ class UserService
         return $this->userRepository->createUser($name, $email, $password);
     }
 
-    public function getUser(int $user_id)
+    public function getUserById(int $user_id)
     {
         return $this->userRepository->getUser($user_id);
     }
