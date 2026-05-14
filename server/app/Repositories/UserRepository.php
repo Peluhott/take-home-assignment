@@ -14,7 +14,7 @@ class UserRepository
 
     public function getUser(int $user_id)
     {
-        return DB::select('SELECT * FROM users where id = ?', [$user_id]);
+        return DB::selectOne('SELECT * FROM users where id = ?', [$user_id]);
     }
 
     public function updateUser(int $user_id, string $name, string $email, string $password)
