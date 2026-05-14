@@ -109,13 +109,9 @@ class GameController
         return $this->gameService->searchGamesByPlatform($data['platform_name'], Auth::id());
     }
 
-    public function searchGamesByTag(Request $request)
+    public function searchGamesByTag(string $tag)
     {
-        $data = $request->validate([
-            'game_tag' => 'required|string|max:255',
-        ]);
-
-        return $this->gameService->searchGamesByTag($data['game_tag'], Auth::id());
+        return $this->gameService->searchGamesByTag($tag, Auth::id());
     }
     public function deleteGame(int $game_id)
     {
