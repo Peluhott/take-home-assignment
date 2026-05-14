@@ -8,9 +8,24 @@ class GameRepository
 {
     // implement methods for creating game, updating game, deleting game
     //implement methods for retrieving games by name, by tags, by platform
-    public function createGame(string $title, int $user_id, ?int $rating = null, ?string $image_url = null, ?string $public_id = null)
-    {
-        return DB::insert('INSERT INTO games (title, rating, image_url, public_id, user_id) VALUES (?, ?, ?, ?, ?)', [$title, $rating, $image_url, $public_id, $user_id]);
+    public function createGame(
+        string $title,
+        int $user_id,
+        ?int $rating = null,
+        ?string $image_url = null,
+        ?string $public_id = null
+    ) {
+        $id = DB::table('games')->insertGetId([
+            'title' => $title,
+            'rating' => $rating,
+            'image_url' => $image_url,
+            'public_id' => $public_id,
+            'user_id' => $user_id,
+        ]);
+
+        return DB::table('games')
+            ->where('id', $id)
+            ->first();
     }
     public function getGame(int $game_id, int $user_id)
     {
@@ -23,7 +38,7 @@ class GameRepository
     // function to search games by title, tags, and platform
     public function searchGames(string $searchTerm, int $user_id)
     {
-        return DB::select('SELECT DISTINCT g.* FROM games g LEFT JOIN game_tags gt on g.id = gt.game_id LEFT JOIN tags t on gt.tag_id = t.id LEFT JOIN platform_games pg on g.id = pg.game_id LEFT JOIN platforms p on pg.platform_id = p.id WHERE (g.title ILIKE ? OR t.name ILIKE ? OR p.name ILIKE ?) AND g.user_id = ?', ['%' . $searchTerm . '%', '%' . $searchTerm . '%', '%' . $searchTerm . '%', $user_id]);
+        return DB::select('SELECT DISTINCT g.* FROM games g LEFT JOIN tags_games tg on g.id = tg.game_id AND tg.user_id = g.user_id LEFT JOIN tags t on tg.tag_id = t.id LEFT JOIN platform_games pg on g.id = pg.game_id LEFT JOIN platforms p on pg.platform_id = p.id WHERE (g.title ILIKE ? OR t.name ILIKE ? OR p.name ILIKE ?) AND g.user_id = ?', ['%' . $searchTerm . '%', '%' . $searchTerm . '%', '%' . $searchTerm . '%', $user_id]);
     }
 
 
@@ -35,7 +50,7 @@ class GameRepository
     }
     public function getGamesByTag(string $game_tag, int $user_id)
     {
-        return DB::select('SELECT g.* FROM games g JOIN game_tags gt ON g.id = gt.game_id JOIN tags t on gt.tag_id = t.id WHERE t.name ILIKE ? AND g.user_id = ?', ['%' . $game_tag . '%', $user_id]);
+        return DB::select('SELECT g.* FROM games g JOIN tags_games tg ON g.id = tg.game_id AND tg.user_id = g.user_id JOIN tags t on tg.tag_id = t.id WHERE t.name ILIKE ? AND g.user_id = ?', ['%' . $game_tag . '%', $user_id]);
     }
 
     public function updategame(int $game_id, string $title, int $user_id, ?int $rating = null, ?string $image_url = null, ?string $public_id = null)
@@ -46,5 +61,38 @@ class GameRepository
     public function deletegame(int $game_id, int $user_id)
     {
         return DB::delete('DELETE FROM games WHERE id = ? AND user_id = ?', [$game_id, $user_id]);
+    }
+
+    public function getTags()
+    {
+        return DB::select('SELECT * FROM tags');
+    }
+
+    public function getPlatforms()
+    {
+        return DB::select('SELECT * FROM platforms');
+    }
+
+    public function getPlatformsByUserId(int $user_id)
+    {
+        return DB::select(
+            'SELECT DISTINCT p.id, p.name, p.image_url
+            FROM platforms p
+            JOIN platform_games pg ON p.id = pg.platform_id
+            JOIN games g ON g.id = pg.game_id
+            WHERE g.user_id = ?
+            ORDER BY p.name ASC',
+            [$user_id]
+        );
+    }
+
+    public function createGameTag(int $game_id, int $tag_id, int $user_id)
+    {
+        return DB::insert('INSERT INTO tags_games (game_id, tag_id, user_id) VALUES (?, ?, ?)', [$game_id, $tag_id, $user_id]);
+    }
+
+    public function createPlatformGame(int $game_id, int $platform_id)
+    {
+        return DB::insert('INSERT INTO platform_games (game_id, platform_id) VALUES (?, ?)', [$game_id, $platform_id]);
     }
 }
