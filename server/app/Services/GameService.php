@@ -51,16 +51,26 @@ class GameService
         if (!$game) {
             throw new \Exception('Game not found or access denied');
         }
+
         $image_url = $game->image_url;
         $public_id = $game->public_id;
+
         if ($image) {
             $uploadResult = $this->cloudinary->uploadApi()->upload($image->getRealPath(), [
                 'folder' => 'game_images',
                 'resource_type' => 'image'
             ]);
+
+            if ($public_id) {
+                $this->cloudinary->uploadApi()->destroy($public_id, [
+                    'resource_type' => 'image'
+                ]);
+            }
+
             $image_url = $uploadResult['secure_url'];
             $public_id = $uploadResult['public_id'];
         }
+
         return $this->gameRepository->updateGame($game_id, $title, $user_id, $rating, $image_url, $public_id);
     }
 
@@ -91,5 +101,30 @@ class GameService
     public function searchGamesByTag(string $game_tag, int $user_id)
     {
         return $this->gameRepository->getGamesByTag($game_tag, $user_id);
+    }
+
+    public function getTags()
+    {
+        return $this->gameRepository->getTags();
+    }
+
+    public function getPlatforms()
+    {
+        return $this->gameRepository->getPlatforms();
+    }
+
+    public function getPlatformsByUserId(int $user_id)
+    {
+        return $this->gameRepository->getPlatformsByUserId($user_id);
+    }
+
+    public function createGameTag(int $game_id, int $tag_id, int $user_id)
+    {
+        return $this->gameRepository->createGameTag($game_id, $tag_id, $user_id);
+    }
+
+    public function createPlatformGame(int $game_id, int $platform_id)
+    {
+        return $this->gameRepository->createPlatformGame($game_id, $platform_id);
     }
 }
