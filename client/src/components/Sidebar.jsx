@@ -26,6 +26,10 @@ export default function Sidebar({setActiveView}){
                     className = "cursor-pointer hover:text-blue-500"
                 >View Platforms</li>
                 <li
+                    onClick={() => setActiveView("viewGenres")}
+                    className = "cursor-pointer hover:text-blue-500"
+                >View By Genre</li>
+                <li
                     onClick={() => setActiveView("viewProfile")}
                     className = "cursor-pointer hover:text-blue-500"
                 >Profile</li>
