@@ -1,6 +1,6 @@
 export default function Sidebar(){
     return (
-        <div className= "bg-gray-200 text-black space-y-4 p-4">
+        <div className= "w-64 min-h-screen bg-gray-200 text-black space-y-4 p-4">
             <h1>Sidebar</h1>
             <ul className = "space-y-4">
                 <li>View Games</li>
