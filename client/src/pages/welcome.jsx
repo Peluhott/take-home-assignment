@@ -5,12 +5,24 @@ import { useState } from "react";
 
 export default function Welcome(){
     
-    
+    function switchToRegister(){
+        setShowRegister(true);
+    }
+
+    function switchToLogin(){
+        setShowRegister(false);
+    }
+
+    const [showRegister, setShowRegister] = useState(false);
     return (
         <div>
             <Navbar />
-            <LoginForm />
-            
+            {showRegister ? (
+                <RegisterForm onSwitchToLogin={switchToLogin} />
+            ) : (
+                <LoginForm onSwitchToRegister={switchToRegister} />
+            )}
+
         </div>
     )
 }
