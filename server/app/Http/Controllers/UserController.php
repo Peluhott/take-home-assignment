@@ -28,18 +28,26 @@ class UserController extends Controller
 
     public function getUser()
     {
-        return $this->userService->getUserById(Auth::id());
+        $userId = Auth::id();
+
+        if (!$userId) {
+            return response()->json(null, 401);
+        }
+
+        return $this->userService->getUserById($userId);
     }
 
-    public function updateUser(Request $request, int $user_id)
+    public function updateUser(Request $request)
     {
+        $userId = Auth::id();
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user_id,
+            'email' => 'required|string|email|max:255|unique:users,email,' . $userId,
             'password' => 'required|string|min:8',
         ]);
 
-        return $this->userService->updateUser($user_id, $data['name'], $data['email'], $data['password']);
+        return $this->userService->updateUser($userId, $data['name'], $data['email'], $data['password']);
     }
 
     public function login(Request $request)
