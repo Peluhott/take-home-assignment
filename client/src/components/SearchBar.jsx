@@ -9,8 +9,8 @@ export default function SearchBar({ onSearch }) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex items-center gap-2">
-            <input
+        <form onSubmit={handleSubmit} className="flex justify-center items-center w-full gap-2">
+            <input className = "border p-2 rounded w-96"
                 type="text"
                 placeholder="Search games..."
                 value={query}
