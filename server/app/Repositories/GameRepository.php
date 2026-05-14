@@ -15,17 +15,23 @@ class GameRepository
         ?string $image_url = null,
         ?string $public_id = null
     ) {
-        $id = DB::table('games')->insertGetId([
-            'title' => $title,
-            'rating' => $rating,
-            'image_url' => $image_url,
-            'public_id' => $public_id,
-            'user_id' => $user_id,
-        ]);
+        DB::insert(
+            'INSERT INTO games (
+            title,
+            rating,
+            image_url,
+            public_id,
+            user_id
+        ) VALUES (?, ?, ?, ?, ?)',
+            [$title, $rating, $image_url, $public_id, $user_id]
+        );
 
-        return DB::table('games')
-            ->where('id', $id)
-            ->first();
+        $id = DB::getPdo()->lastInsertId();
+
+        return DB::selectOne(
+            'SELECT * FROM games WHERE id = ?',
+            [$id]
+        );
     }
     public function getGame(int $game_id, int $user_id)
     {
