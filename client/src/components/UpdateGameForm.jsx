@@ -50,7 +50,7 @@ export default function UpdateGameForm({ game, onGameUpdated }) {
     }
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="flex justify-center items-center min-h-screen bg-white">
             <form
                 onSubmit={handleSubmit}
                 className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-4"
