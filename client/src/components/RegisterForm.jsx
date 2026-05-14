@@ -53,6 +53,7 @@ export default function RegisterForm({onSwitchToLogin}) {
             </button>
             <button
                 type="button"
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                 onClick={onSwitchToLogin}>
                 Back to Login
 
