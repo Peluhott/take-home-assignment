@@ -15,8 +15,12 @@ Route::post('/user/login', [UserController::class, 'login']);
 
 //protected routes for games
 Route::middleware('auth')->group(function () {
+    Route::put('/user', [UserController::class, 'updateUser']);
     Route::post('/game', [GameController::class, 'createGame']);
     Route::get('/game', [GameController::class, 'getGames']);
+    Route::get('/game/tags', [GameController::class, 'getTags']);
+    Route::get('/game/platforms', [GameController::class, 'getPlatforms']);
+    Route::get('/game/user-platforms', [GameController::class, 'getUserPlatforms']);
     Route::put('/game/{game_id}', [GameController::class, 'updateGame']);
     Route::get('/game/{game_id}', [GameController::class, 'getGame']);
     Route::delete('/game/{game_id}', [GameController::class, 'deleteGame']);
