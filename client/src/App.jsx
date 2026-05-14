@@ -12,11 +12,11 @@ function App() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+        useEffect(() => {
         axios
             .get("/user")
             .then((res) => {
-                setUser(res.data);
+                setUser(res.data ?? null);
             })
             .catch(() => {
                 setUser(null);
