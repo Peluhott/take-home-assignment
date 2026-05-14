@@ -9,13 +9,13 @@ export default function SearchBar({ onSearch }) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex justify-center items-center w-full gap-2">
-            <input className = "border p-2 rounded w-96"
+        <form onSubmit={handleSubmit} className="flex justify-center items-center w-full gap-2 bg-gray-200">
+            <input className = "bg-white border p-2 rounded w-96"
                 type="text"
                 placeholder="Search games..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="border p-2 rounded"
+                
             />
             <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Search
